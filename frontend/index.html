@@ -1,1 +1,176 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>AI Code Reviewer</title>
 
+    <style>
+        body {
+            font-family: Arial;
+            margin: 0;
+            background: #121212;
+            color: #e0e0e0;
+        }
+
+        header {
+            background: #1f1f1f;
+            padding: 15px;
+            text-align: center;
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        .container {
+            padding: 20px;
+        }
+
+        textarea, input {
+            width: 100%;
+            padding: 10px;
+            margin-top: 10px;
+            background: #1e1e1e;
+            color: white;
+            border: 1px solid #333;
+            border-radius: 5px;
+        }
+
+        button {
+            margin-top: 10px;
+            padding: 10px;
+            background: #4aa3f0;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #357acc;
+        }
+
+        .card {
+            background: #1e1e1e;
+            padding: 15px;
+            margin-top: 20px;
+            border-radius: 8px;
+        }
+
+        .bug { color: #ff6b6b; }
+        .smell { color: #ffa94d; }
+        .good { color: #69db7c; }
+
+        .score {
+            font-size: 22px;
+            margin-top: 10px;
+        }
+
+        .high { color: #69db7c; }
+        .medium { color: #ffa94d; }
+        .low { color: #ff6b6b; }
+
+        #loading {
+            display: none;
+            margin-top: 10px;
+            color: #4aa3f0;
+        }
+
+        table {
+            width: 100%;
+            margin-top: 10px;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            padding: 10px;
+            text-align: center;
+            border-bottom: 1px solid #333;
+        }
+
+        tr:hover {
+            background-color: #2a2a2a;
+            cursor: pointer;
+        }
+
+        #summary {
+            display: flex;
+            gap: 15px;
+            margin-top: 10px;
+        }
+
+        #summary div {
+            background: #2a2a2a;
+            padding: 10px;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+
+<body>
+
+<header>AI Code Reviewer 🚀</header>
+
+<div class="container">
+
+    <!-- 🔹 CODE ANALYSIS -->
+    <div class="card">
+        <h3>Analyze Code</h3>
+        <textarea id="code" rows="10" placeholder="Paste your code here..."></textarea>
+        <button onclick="analyze()">Analyze Code</button>
+    </div>
+
+    <!-- 🔹 REPO ANALYSIS -->
+    <div class="card">
+        <h3>Analyze GitHub Repository</h3>
+        <input type="text" id="repo" placeholder="Enter GitHub repo URL">
+        <button onclick="analyzeRepo()">Analyze Repo</button>
+    </div>
+
+    <!-- 🔹 LOADING -->
+    <div id="loading">⏳ Analyzing... Please wait</div>
+
+    <!-- 🔹 RAW OUTPUT -->
+    <div class="card">
+        <h3>Raw Output</h3>
+        <pre id="output"></pre>
+    </div>
+
+    <!-- 🔥 REPO DASHBOARD -->
+    <div class="card" id="repoDashboard" style="display:none;">
+        <h2>Repository Dashboard 📊</h2>
+
+        <!-- Summary -->
+        <div id="summary"></div>
+
+        <!-- Table -->
+        <h3>File Analysis</h3>
+        <table id="fileTable">
+            <thead>
+                <tr>
+                    <th>File</th>
+                    <th>Score</th>
+                    <th>Bugs</th>
+                    <th>Smells</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+
+        <!-- Worst Files -->
+        <h3>⚠️ Worst Files</h3>
+        <div id="worstFiles"></div>
+    </div>
+
+    <!-- 🔍 FILE DETAIL VIEW -->
+    <div class="card" id="fileDetail" style="display:none;">
+        <h3>File Details</h3>
+        <div id="fileContent"></div>
+    </div>
+
+    <!-- 🔹 SINGLE CODE ISSUES -->
+    <div class="card" id="issues"></div>
+
+</div>
+
+<script src="script.js"></script>
+
+</body>
+</html>
