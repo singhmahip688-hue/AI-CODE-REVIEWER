@@ -22,7 +22,7 @@ def fetch_repo_files(repo_url):
     code_files = []
 
     for item in tree_data.get("tree", []):
-        if item["type"] == "blob" and item["path"].endswith(".py"):
+        if item["type"] == "blob" and item["path"].endswith(".py", ".js", ".java", ".cpp", ".c", ".html", ".css"):
             file_url = f"https://raw.githubusercontent.com/{owner}/{repo}/{branch}/{item['path']}"
 
             try:
