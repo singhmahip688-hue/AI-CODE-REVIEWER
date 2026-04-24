@@ -47,13 +47,15 @@ def analyze_repo():
 
     print("Repo URL:", repo_url)
 
-    # ✅ ADD TRY-CATCH HERE
+    # ✅ Try-catch (important)
     try:
         files = fetch_repo_files(repo_url)
         print("Fetched files:", len(files))
     except Exception as e:
         print("ERROR:", str(e))
         return jsonify({"error": str(e)}), 500
+
+    # ✅ Empty repo handling
     if not files:
         return jsonify({
             "summary": {
@@ -68,42 +70,51 @@ def analyze_repo():
 
     all_results = []
 
+    # 🔥 MAIN LOOP
     for file in files:
-        code = file["code"]   # ✅ extract actual code
+        code = file["code"]
+        lang = file["language"]
 
-        complexity = analyze_complexity(code)
-        smells = detect_code_smells(code)
-        bugs = detect_bugs(code)
+        # 🔥 SMART MULTI-LANGUAGE LOGIC
+        if lang == "python":
+            complexity = analyze_complexity(code)
+            smells = detect_code_smells(code)
+            bugs = detect_bugs(code)
+        else:
+            complexity = []
+            smells = [f"Basic analysis only for {lang}"]
+            bugs = []
 
         score = calculate_score(complexity, smells, bugs)
 
         all_results.append({
-            "file": file["file"],   # ✅ filename added
+            "file": file["file"],
+            "language": lang,
             "complexity": complexity,
             "code_smells": smells,
             "bugs": bugs,
             "score": score
         })
 
-
+    # 🔥 SUMMARY CALCULATION
     total_files = len(all_results)
     total_bugs = sum(len(f["bugs"]) for f in all_results)
     total_smells = sum(len(f["code_smells"]) for f in all_results)
     avg_score = int(sum(f["score"] for f in all_results) / total_files)
 
-    # 🔥 Worst files (lowest score)
+    # 🔥 WORST FILES
     worst_files = sorted(all_results, key=lambda x: x["score"])[:3]
 
     return jsonify({
         "summary": {
-        "repo_score": avg_score,
-        "total_files": total_files,
-        "total_bugs": total_bugs,
-        "total_smells": total_smells
-    },
-    "files": all_results,
-    "worst_files": [f["file"] for f in worst_files]
-})
+            "repo_score": avg_score,
+            "total_files": total_files,
+            "total_bugs": total_bugs,
+            "total_smells": total_smells
+        },
+        "files": all_results,
+        "worst_files": [f["file"] for f in worst_files]
+    })
 
 
 # 🔹 Run Server
