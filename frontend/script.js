@@ -11,20 +11,33 @@ function analyze() {
 
     fetch("http://127.0.0.1:5000/analyze", {
         method: "POST",
-        headers: {"Content-Type": "application/json"},
+        headers: {
+            "Content-Type": "application/json"
+        },
         body: JSON.stringify({ code })
     })
-    .then(res => res.json())
-    .then(data => {
+    .then(async (res) => {
+
+        const data = await res.json();
+
+        if (!res.ok) {
+            throw new Error(data.error || "Server Error");
+        }
+
+        return data;
+    })
+    .then((data) => {
         showLoading(false);
         displayResult(data);
     })
-    .catch(() => {
+    .catch((err) => {
         showLoading(false);
-        alert("Error analyzing code");
+
+        console.error("FULL ERROR:", err);
+
+        alert("Backend Error:\n" + err.message);
     });
 }
-
 
 function analyzeRepo() {
     const repo = document.getElementById("repo").value;
