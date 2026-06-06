@@ -21,24 +21,31 @@ def home():
 
 
 # 🔹 Analyze Direct Code
+# 🔹 Analyze Direct Code
+# 🔹 Analyze Direct Code
 @app.route('/analyze', methods=['POST'])
 def analyze_code():
-    code = request.json.get("code")
+    try:
+        data = request.get_json()
 
-    complexity = analyze_complexity(code)
-    smells = detect_code_smells(code)
-    bugs = detect_bugs(code)
+        code = data["code"]
 
-    # ⭐ Score calculation
-    score = calculate_score(complexity, smells, bugs)
+        complexity = analyze_complexity(code)
+        smells = detect_code_smells(code)
+        bugs = detect_bugs(code)
 
-    return jsonify({
-        "complexity": complexity,
-        "code_smells": smells,
-        "bugs": bugs,
-        "score": score
-    })
+        score = calculate_score(complexity, smells, bugs)
 
+        return jsonify({
+            "complexity": complexity,
+            "code_smells": smells,
+            "bugs": bugs,
+            "score": score
+        })
+
+    except Exception as e:
+        print("ANALYZE ERROR:", str(e))
+        return jsonify({"error": str(e)}), 500
 
 # 🔹 Analyze GitHub Repository
 @app.route('/analyze_repo', methods=['POST'])
