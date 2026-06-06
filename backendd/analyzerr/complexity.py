@@ -3,6 +3,7 @@ from radon.complexity import cc_visit
 def analyze_complexity(code):
     try:
         results = cc_visit(code)
+
         output = []
 
         for block in results:
@@ -13,5 +14,7 @@ def analyze_complexity(code):
             })
 
         return output
-    except:
+
+    except Exception as e:
+        print("RADON ERROR:", str(e))
         return []
