@@ -1,6 +1,6 @@
 // 🔹 Set this to your deployed backend URL (e.g. https://ai-code-reviewer-backend.onrender.com)
 // Leave as localhost only while testing on your own machine.
-const API_BASE = "http://127.0.0.1:5000";
+const API_BASE = "https://ai-code-reviewer-x7hw.onrender.com";
 
 function showLoading(show) {
     document.getElementById("loading").style.display = show ? "block" : "none";
