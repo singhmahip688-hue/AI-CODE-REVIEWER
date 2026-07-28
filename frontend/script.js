@@ -1,3 +1,7 @@
+// 🔹 Set this to your deployed backend URL (e.g. https://ai-code-reviewer-backend.onrender.com)
+// Leave as localhost only while testing on your own machine.
+const API_BASE = "http://127.0.0.1:5000";
+
 function showLoading(show) {
     document.getElementById("loading").style.display = show ? "block" : "none";
 }
@@ -9,7 +13,7 @@ function analyze() {
 
     showLoading(true);
 
-    fetch("http://127.0.0.1:5000/analyze", {
+    fetch(`${API_BASE}/analyze`, {
         method: "POST",
         headers: {
             "Content-Type": "application/json"
@@ -44,7 +48,7 @@ function analyzeRepo() {
 
     showLoading(true);
 
-    fetch("http://127.0.0.1:5000/analyze_repo", {
+    fetch(`${API_BASE}/analyze_repo`, {
         method: "POST",
         headers: {"Content-Type": "application/json"},
         body: JSON.stringify({ repo_url: repo })
